@@ -1,4 +1,4 @@
-NAME=shadowforward
+NAME=GoForward
 BINDIR=bin
 GOBUILD=CGO_ENABLED=0 go build -ldflags '-w -s'
 # The -w and -s flags reduce binary sizes by excluding unnecessary symbols and debug info

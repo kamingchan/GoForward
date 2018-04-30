@@ -1,4 +1,4 @@
-# shadowforward
+# GoForward
 
 a simple port forward tool written in go
 
@@ -6,7 +6,7 @@ a simple port forward tool written in go
 
 ```bash
 # forward 0.0.0.0:1000-2000 to 1.1.1.1:1000-2000.
-./shadowforward 1000 2000 1.1.1.1
+./goforward 1000 2000 1.1.1.1
 ```
 
 ## Reference
