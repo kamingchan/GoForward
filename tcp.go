@@ -26,7 +26,7 @@ func (p *tcpConnection) forward() {
 	}
 	defer p.remoteConnection.Close()
 
-	fmt.Printf("Start proxying: %s %s\n", p.localConnection.LocalAddr(), p.remoteConnection.LocalAddr())
+	fmt.Printf("new TCP connection from %s via %s\n", p.localConnection.LocalAddr(), p.remoteConnection.LocalAddr())
 
 	var closed = make(chan bool)
 	go p.exchangeData(p.remoteConnection, p.localConnection, closed)
@@ -35,7 +35,7 @@ func (p *tcpConnection) forward() {
 	<-closed
 	<-closed
 
-	fmt.Printf("Done proxying: %s %s\n", p.localConnection.LocalAddr(), p.remoteConnection.LocalAddr())
+	fmt.Printf("close TCP connection from %s via %s\n", p.localConnection.LocalAddr(), p.remoteConnection.LocalAddr())
 }
 
 // exchangeData reads from source connection and forwards
