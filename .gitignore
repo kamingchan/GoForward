@@ -15,3 +15,6 @@
 
 # GoLand
 .idea/
+
+# Binary
+bin/
