@@ -9,6 +9,7 @@ import (
 type tcpConnection struct {
 	localAddress, remoteAddress       string
 	localConnection, remoteConnection net.Conn
+	port                              int
 }
 
 // forward establishes the connection to the remote server and
@@ -26,7 +27,7 @@ func (p *tcpConnection) forward() {
 	}
 	defer p.remoteConnection.Close()
 
-	fmt.Printf("new TCP connection from %s via %s\n", p.localConnection.LocalAddr(), p.remoteConnection.LocalAddr())
+	fmt.Printf("[%d] new TCP connection from %s via %s\n", p.port, p.localConnection.RemoteAddr(), p.remoteConnection.LocalAddr())
 
 	var closed = make(chan bool)
 	go p.exchangeData(p.remoteConnection, p.localConnection, closed)
@@ -35,7 +36,7 @@ func (p *tcpConnection) forward() {
 	<-closed
 	<-closed
 
-	fmt.Printf("close TCP connection from %s via %s\n", p.localConnection.LocalAddr(), p.remoteConnection.LocalAddr())
+	fmt.Printf("[%d] close TCP connection from %s via %s\n", p.port, p.localConnection.RemoteAddr(), p.remoteConnection.LocalAddr())
 }
 
 // exchangeData reads from source connection and forwards

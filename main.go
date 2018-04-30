@@ -24,7 +24,7 @@ func main() {
 	for port := from; port <= to; port ++ {
 		var local = fmt.Sprintf("0.0.0.0:%d", port)
 		var remote = fmt.Sprintf("%s:%d", dest, port)
-		NewServer(local, remote).Start()
+		NewServer(local, remote, port).Start()
 	}
 	select {}
 }

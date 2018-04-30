@@ -8,16 +8,18 @@ import (
 type Server struct {
 	localAddress    string
 	destAddress     string
+	port            int
 	tcpListener     net.Listener
 	udpListener     net.PacketConn
 	udpClients      map[string]*udpConnection
 	udpClientClosed chan string
 }
 
-func NewServer(l string, d string) *Server {
+func NewServer(l string, d string, p int) *Server {
 	return &Server{
 		localAddress: l,
 		destAddress:  d,
+		port:         p,
 		udpClients:   make(map[string]*udpConnection),
 	}
 }
@@ -41,6 +43,7 @@ func (s *Server) Start() {
 				localConnection: connection,
 				localAddress:    s.localAddress,
 				remoteAddress:   s.destAddress,
+				port:            s.port,
 			}
 
 			go p.forward()
@@ -67,7 +70,7 @@ func (s *Server) Start() {
 
 				conn, found := s.udpClients[clientAddr]
 				if found {
-					fmt.Printf("timeout UDP connection from %s via %s\n", clientAddr, conn.remoteAddress.String())
+					fmt.Printf("[%d] timeout UDP connection from %s via %s\n", s.port, clientAddr, conn.remoteAddress.String())
 					conn.remoteConnection.Close()
 					delete(s.udpClients, clientAddr)
 				}
@@ -98,7 +101,7 @@ func (s *Server) Start() {
 
 				s.udpClients[address.String()] = connection
 
-				fmt.Printf("new UDP connection from %s via %s\n", address.String(), remoteUDPConn.LocalAddr().String())
+				fmt.Printf("[%d] new UDP connection from %s via %s\n", s.port, address.String(), remoteUDPConn.LocalAddr().String())
 
 				// wait for data from remote server
 				go connection.Reply()
